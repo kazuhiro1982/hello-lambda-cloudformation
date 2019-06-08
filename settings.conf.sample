@@ -1,0 +1,3 @@
+BaseStackName=develop
+OPTIONS=""
+PARAMS="BaseStackName=develop ApiVersion=1.0 ApiUrl=http://localhost ApiToken=xxx"

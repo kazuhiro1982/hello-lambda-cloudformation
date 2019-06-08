@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: Lambda CloudFormation Template
+Parameters:
+  BaseStackName:
+    Type: String
+    Description: Base Stack Name
+  ApiVersion:
+    Type: String
+    Description: API Version
+    Default: v1
+  ApiUrl:
+    Type: String
+    Description: API Url
+    Default: https://api.example.net/api
+  ApiToken:
+    Type: String
+    Description: API Token
+    NoEcho: true
+Resources:
+  HttpCallFunction: 
+    Type: 'AWS::Lambda::Function' 
+    Properties: 
+      Code: hello-http 
+      Description: Lambda Function
+      FunctionName: !Sub hello-http-${BaseStackName} 
+      Role: 
+        Fn::GetAtt: [ LambdaExecutionRole, Arn ] 
+      Runtime: nodejs8.10 
+      Timeout: 25 
+      Handler: index.handler 
+      Environment: 
+        Variables: 
+          ApiVersion: !Ref ApiVersion
+          ApiUrl: !Ref ApiUrl
+          ApiToken: !Ref ApiToken
+  LambdaExecutionRole: 
+    Type: 'AWS::IAM::Role' 
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: 2012-10-17 
+        Statement: 
+          - 
+            Effect: 'Allow' 
+            Principal: 
+              Service: 
+                - 'lambda.amazonaws.com' 
+            Action: 
+              - 'sts:AssumeRole' 
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
